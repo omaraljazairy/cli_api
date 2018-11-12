@@ -1,0 +1,12 @@
+import logging
+import logging.config
+import yaml
+import configs as conf
+import requests
+from cachetools import TTLCache
+from datetime import datetime, timedelta
+
+log_conf = open('configs/logger.yaml')
+config = yaml.load(log_conf.read())
+logging.config.dictConfig(config)
+logger = logging.getLogger("requester")
