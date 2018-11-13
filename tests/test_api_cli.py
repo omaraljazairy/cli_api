@@ -80,7 +80,7 @@ class TestCLI:
 
         
         
-    def xtest_get_token(self):
+    def test_get_token(self):
         """ expects to have return a token from the token api or the refresh """
 
         token = get_token()
