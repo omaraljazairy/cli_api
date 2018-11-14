@@ -1,7 +1,7 @@
-from configs import configs as conf
+from fedal_cli.configs import configs as conf
 import requests
 import redis
-from services.logger import get_logger
+from fedal_cli.services.logger import get_logger
 from datetime import datetime, timedelta
 
 logger = get_logger(loggername='requester')
