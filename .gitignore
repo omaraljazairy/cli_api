@@ -1,1 +1,9 @@
 *.log
+.coverage
+coverage.xml
+nosetests.xml
+tests/htmlcov/*
+*.html
+*.js
+*.css
+*.json
