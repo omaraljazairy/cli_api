@@ -1,9 +1,9 @@
 from fedal_cli.configs import configs as conf
-from services.requester import make_request, get_token, get_token_cached_times_diff
+from fedal_cli.services.requester import make_request, get_token, get_token_cached_times_diff
 import click
 from click.testing import CliRunner
 from nose.tools import assert_true, assert_equal
-from services.logger import get_logger
+from fedal_cli.services.logger import get_logger
 import redis
 from datetime import datetime, timedelta
 
