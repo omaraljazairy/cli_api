@@ -1,9 +1,0 @@
-URL='127.0.0.1:8000'
-REDIS_LOCATION='redis://192.168.192.26:6379/0'
-REDIS_PASSWORD='mytestpass'
-API={
-    'token': '/api/token/',
-    'token_refresh': 'api/token/refresh/',
-    'spanglish_add_word': 'spanglish/word/'
-    }
-     
