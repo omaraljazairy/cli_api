@@ -1,0 +1,28 @@
+import click
+
+@click.command()
+def main():
+    """ prints a list of the apis and their option number to be selected """
+
+    apis = {
+        1:'add word',
+        2:'add sentence',
+        3:'add verb',
+    }
+    for k,v in apis.items():
+        click.echo(k, " - ", v)
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,27 @@
+import configs as conf
+import request
+
+
+def make_request(action='str', api='str', header=dict, **kwargs):
+    """ makes the http request and returns a response """
+
+    api_request = conf.URL + conf.API[api]
+    print("api_request: ", api_request)
+    print("action: ", action)
+    print("params: ", kwargs)
+    print("headers: ", header)
+    response = {
+        'action': action,
+        'api': api,
+        'header': header,
+        'params': kwargs,
+        'api_request': api_request,
+        }
+    print("response: ", response)
+    return response
+
+
+def get_token():
+    """ returns the token for the request """
+    return 'token'
+
