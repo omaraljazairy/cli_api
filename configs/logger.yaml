@@ -6,7 +6,7 @@ formatters:
 
     simple:
 
-        format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        format: "%(asctime)s - %(name)s - %(funcName)s - %(levelname)s - %(message)s"
 
 handlers:
 
@@ -90,6 +90,15 @@ loggers:
 
 
     test:
+
+        level: DEBUG
+
+        handlers: [debug_file_handler]
+
+        propagate: no
+
+
+    tokens:
 
         level: DEBUG
 

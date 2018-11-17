@@ -9,3 +9,5 @@ tests/htmlcov/*
 *.json
 settings.py
 *.pyc
+*.py~
+.DS_Store
