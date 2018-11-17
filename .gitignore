@@ -8,3 +8,4 @@ tests/htmlcov/*
 *.css
 *.json
 settings.py
+*.pyc

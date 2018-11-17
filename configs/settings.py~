@@ -34,6 +34,6 @@ API={
     }
 
 AUTH= {
-    'user': 'foobar',
-    'password': 'mytest',
+    'user': 'omar',
+    'password': 'myfedal2018',
     }
