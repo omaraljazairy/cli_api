@@ -17,39 +17,57 @@ def get_token():
     """
 
     token = cache.get('token')
-    timediff = get_token_cached_times_diff(cached_key='last_verified')
-    logger.debug("timediff: %s", timediff)
-    #token_time_diff = datetime.now() - created.decode('ASCII')
-    #logger.debug("token_time_diff: %s", token_time_diff)
-    # if the token is found in the cache, return it as a decoded string
 
-    if token:
+    # if the token is found in the cache, check the last_verified. if it's less then 10 min, return
+    # the token. else verify it. 
+
+    if token: # token in the cache. check verify timestamp
+        token = token.decode('ASCII')
         logger.debug("token found in the cache")
-        if get_token_cached_times_diff(cached_key='token', unit='minutes') < 10:
+
+        # if the token has been verified less than 10 minutes ago, return it
+        if get_token_cached_times_diff(cached_key='last_verified', unit='minutes') < 10:
             logger.debug("token was verified in less then 10 minutes")
-            return token.decode('ASCII')
-        else:
+            return token
+
+        # token has been verified more than 10 minutes. going to verify it now
+        else: 
             logger.debug("token was checked more then 10 minutes. going to verify it")
-            api_request = conf.URL + conf.API['token']['verify']            
-            response = request.post(api_request, data={'token': token})
-            if response.status_code == 200:
-                logger.debug("response from verify is 200")
+            token_status = verify_token(token=token)
+
+            # if the verify api returns 200, return token
+            if token_status:
+                logger.debug("response from verify is OK")
                 return token
+
+            # token is invalid. going to call the refresh api
             else:
                 logger.debug("response is not 200. token is not valid anymore. going to get a new one from the refresh api")
-                api_request = conf.URL + conf.API['token']['refresh']
-                response = request.post(api_request, data={'refresh': cache.get('refresh')})
-                if response.status_code == 200:
-                    logger.debug("response is 200. storing the token in the cache and removing the refresh token")
-                    cache.set('token', data['access'], ex=conf.CACHE['REDIS']['TTL'])
-                    cache.delete('refresh')
-                
-            
+                refresh_response_token = refresh_token()
+                if refresh_response_token:
+                    logger.debug("get new token from refresher")
+                    return refresh_response_token
 
+                else: # going to call the set_token as the refresh_token doesn't have a valid token
+                    set_response_token = set_token()
+                    if set_response_token:
+                        logger.debug("got a new token from the set_token")
+                        return set_response_token
+
+                    else: # unable to get a new token
+                        logger.error("token can not be set")
+                        raise Exception("token can not be set")
+
+    # if there is no token in the session, call the set_token to retrieve a new one                
     else:
-        # make a login request to get a token and store it in the cache      
+        set_response_token = set_token()
+        if set_response_token:
+            logger.debug("got a new token from the set_token")
+            return set_response_token
 
-        logger.debug("token not in cache")
+        else: # unable to get a new token
+            logger.error("token can not be set")
+            raise Exception("token can not be set")
     
 
 def set_token(user='omar'):
@@ -75,6 +93,7 @@ def set_token(user='omar'):
             return token.decode('ASCII')
         except Exception as e:
             logger.error("redis could not save into cache. message: %s", str(e))
+            return False
             
     else:
         err_msg = data
@@ -83,39 +102,48 @@ def set_token(user='omar'):
 
 
 
-def refresh_token(refresh_token=str):
+def refresh_token():
     """ 
-    takes the refresh_token and calls the refresh api to get a new token. the new token will be saved in the cache
-    and returned. the refreshed token will be removed from the cache.
+    first checks if there is a refreshed token in the cache. calls the refresh api to get a new token. 
+    the new token will be saved in the cache and returned. the refreshed token will be removed from the cache.
     it will return False if the refresh api doesn't return 200.
     """
 
-    logger.debug("received refreshed_token: %s", refresh_token)
-    api_request = conf.URL + conf.API['token']['refresh']
-    response = requests.post(api_request, data={'refresh': refresh_token})
-    data = response.json()
-    status_code = response.status_code
-    logger.debug("response: %s", data)
+    refresh_token = cache.get('refresh')
 
-    if response.status_code == 200:
-        logger.debug("response is 200. storing the token in the cache and removing the refresh token")
+    if refresh_token:
+        refresh_token = refresh_token.decode('ASCII')
+        logger.debug("refresh token found in the cache")
+        api_request = conf.URL + conf.API['token']['refresh']
+        response = requests.post(api_request, data={'refresh': refresh_token})
+        data = response.json()
+        status_code = response.status_code
+        logger.debug("response: %s", data)
 
-        try:
-            cache.set('token', data['access'], ex=conf.CACHE['REDIS']['TTL'])
-            cache.delete('refresh')
-            logger.debug("token saved and refresh is removed from cache")
+        if response.status_code == 200:
+            logger.debug("response is 200. storing the token in the cache and removing the refresh token")
 
-            token = cache.get('token')
-            return token.decode('ASCII')
+            try:
+                cache.set('token', data['access'], ex=conf.CACHE['REDIS']['TTL'])
+                cache.delete('refresh')
+                logger.debug("token saved and refresh is removed from cache")
 
-        except Exception as e:
-            logger.error("redis could not save into cache. message: %s", str(e))
+                token = cache.get('token')
+                return token.decode('ASCII')
+
+            except Exception as e:
+                logger.error("redis could not save into cache. message: %s", str(e))
+                return False
             
 
-    else:
-        err_msg = data
-        logger.error("refresh token could not be retrieved: %s", err_msg)
+        else:
+            err_msg = data
+            logger.error("refresh token could not be retrieved: %s", err_msg)
+            return False
+    else: # no refresh token found in cache. return False
+        logger.error("no refresh token found in cache")
         return False
+        
 
 
 
