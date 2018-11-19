@@ -8,7 +8,7 @@ logger = get_logger(loggername='tokens')
 cache = redis.Redis(host=conf.CACHE['REDIS']['URL'], password=conf.CACHE['REDIS']['PASSWORD'])
 
 
-def get_token():
+def get_token(user='omar'):
     """ 
     returns the token an active to to be used in the request header. It checks first for the
     token in the cache. If it's available, it will return it. If not not, it will call the token api
@@ -49,25 +49,28 @@ def get_token():
                     return refresh_response_token
 
                 else: # going to call the set_token as the refresh_token doesn't have a valid token
-                    set_response_token = set_token()
-                    if set_response_token:
+                    try:
+                        set_response_token = set_token(user=user)
+                        #if set_response_token:
                         logger.debug("got a new token from the set_token")
                         return set_response_token
 
-                    else: # unable to get a new token
-                        logger.error("token can not be set")
-                        raise Exception("token can not be set")
+                    except Exception as e: # unable to get a new token
+                        logger.error("token can not be set: %s", str(e))
+                        print("token can not be set retrieved")
+                        return False
 
     # if there is no token in the session, call the set_token to retrieve a new one                
     else:
-        set_response_token = set_token()
-        if set_response_token:
+        try:
+            set_response_token = set_token(user=user)
             logger.debug("got a new token from the set_token")
             return set_response_token
 
-        else: # unable to get a new token
+        except Exception as e: # unable to get a new token
             logger.error("token can not be set")
-            raise Exception("token can not be set")
+            print("token can not be set")
+            return False
     
 
 def set_token(user='omar'):

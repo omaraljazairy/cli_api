@@ -24,7 +24,7 @@ class TestTokens:
         
 
 
-    def test_get_token(self):
+    def test_get_token_ok(self):
         """ expects to return a token from the token api. the token should be stored in the cache """
 
         token = get_token()
@@ -34,6 +34,23 @@ class TestTokens:
 
         assert_equal(token, cached_token)
         #assert_true(True)
+
+
+    def test_get_token_false(self):
+        """ 
+        expects to return false because the user doesn't exist and there is no token in the cache 
+        there should not be any token or refresh token stored in the cache.
+        """
+
+        token = get_token(user='test')
+        
+        cached_token = cache.get('token')
+        refreshed_token = cache.get('refresh')
+
+        logger.debug("cached_token: %s - refreshed_token: %s", cached_token, refreshed_token)
+        assert_false(token)
+        assert_false(cached_token)
+        assert_false(refreshed_token)
 
 
     def test_get_token_existing_token_and_verified(self):
@@ -210,7 +227,53 @@ class TestTokens:
         logger.debug("refresh_token_response: %s", refresh_token_response)
 
         assert_false(refresh_token_response)
-        
+
+
+    def test_get_token_with_invalid_user(self):
+        """ 
+        create a valid token, modify the token and refresher so they become invalid. change the 
+        last_verified so it will get an invalid response from the verify api. expect it to raise 
+        an exception at the end.
+        """
+
+        token = set_token() #create a new token, refresher and set last_verified.
+        new_token = 'foobar' # modifing the token so it will become invalid.
+        cache.set('token', new_token) # set the invalid token
+        refresh_token = 'barfoo' # changing the refresh token to become invalid.
+        cache.set('refresh', refresh_token) # set it in cache.
+        yesterday_date = datetime.now() + timedelta(days=-1) # move the last_verified one dat back. 
+        cache.set('last_verified', yesterday_date) # set the date in the cache.
+
+        # calling the 
+        #with assert_raises(Exception):
+        invalid_token = get_token(user='test')
+        logger.debug("invalid token response: %s", invalid_token)
+
+        assert_false(invalid_token)
+
+
+
+    def test_get_token_with_invalid_user_no_refresh_token(self):
+        """ 
+        create a valid token, modify the token and remove the refresher from the cache 
+        so they become invalid. change the last_verified so it will get an invalid 
+        response from the verify api. expect it to raise an exception at the end.
+        """
+
+        token = set_token() #create a new token, refresher and set last_verified.
+        new_token = 'foobar' # modifing the token so it will become invalid.
+        cache.set('token', new_token) # set the invalid token
+        cache.delete('refresh') # remove the refresh from the cache.
+        yesterday_date = datetime.now() + timedelta(days=-1) # move the last_verified one dat back. 
+        cache.set('last_verified', yesterday_date) # set the date in the cache.
+
+        # calling the 
+        #with assert_raises(Exception):
+        invalid_token =  get_token(user='test')
+        logger.debug("invalid token response: %s", invalid_token)
+
+        assert_false(invalid_token)
+
         
     def test_get_token_cached_times_diff_seconds(self):
         """ 
