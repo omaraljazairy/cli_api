@@ -13,12 +13,15 @@ class TestTokens:
 
 
     def setUp(self):
-        """ set up test before every function is executed """
+        """ set up test before every function is executed. delete cache """
 
         cache.delete('token')
         cache.delete('refresh')
         cache.delete('last_verified')
-
+        #cache.delete(conf.throttle_key)
+        #cache.delete(':1:throttle_spanglish_127.0.0.1')
+        #cache.delete(':1:throttle_spanglish_85.214.61.104')
+        [cache.delete(key) for key in conf.THROTTLE_KEYS]
         logger.debug("all cached keys are deleted")
         logger.debug("setup_func executed")
         
