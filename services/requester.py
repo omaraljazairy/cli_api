@@ -47,7 +47,7 @@ def make_request( *args, action='str', api=dict,  **kwargs):
 
     elif action.upper() == 'POST':
 
-        response = requests.post(api_request, params=kwargs, headers=header)
+        response = requests.post(api_request, data=kwargs, headers=header)
         logger.debug("response: %s", response)
 
         return response
@@ -56,7 +56,7 @@ def make_request( *args, action='str', api=dict,  **kwargs):
     elif action.upper() == 'PUT':
 
         api_request = api_request + '/'.join(args) + '/' if args else api_request # + args_params
-        response = requests.post(api_request, params=kwargs, headers=header)
+        response = requests.patch(api_request, data=kwargs, headers=header)
         logger.debug("response: %s", response)
 
         return response
@@ -65,13 +65,14 @@ def make_request( *args, action='str', api=dict,  **kwargs):
     elif action.upper() == 'DELETE':
 
         api_request = api_request + '/'.join(args) + '/' if args else api_request # + args_params
-        response = requests.post(api_request, params=kwargs, headers=header)
+        response = requests.delete(api_request, headers=header)
         logger.debug("response: %s", response)
 
         return response
 
     else:
 
+        logger.error("unknown action: %s provided", action)
         return {"ERROR":" Unknown Action"}
 
 
