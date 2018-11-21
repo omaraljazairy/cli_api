@@ -22,8 +22,8 @@ class TestRequester:
 
         api = ('spanglish', 'word')
         params = {
-            'word': 'mytesto11',
-            'word_en': 'mytest11',
+            'word': 'mytesto12',
+            'word_en': 'mytest12',
             'category': 'General',
             'language': 'ES',
         }
