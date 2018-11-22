@@ -10,83 +10,73 @@ from datetime import datetime, timedelta
 
 cache = redis.Redis(host=conf.CACHE['REDIS']['URL'], password=conf.CACHE['REDIS']['PASSWORD'])
 logger = get_logger(loggername='test')
-
+api_url = conf.API['uri']
 
 
 class TestRequester:
 
 
-    def setUp(self):
-
-        logger.debug("setUp")
-
-        api = ('spanglish', 'word')
-        params = {
-            'word': 'mytesto12',
-            'word_en': 'mytest12',
-            'category': 'General',
-            'language': 'ES',
-        }
-        response = make_request(action='POST', api=api, **params)
-        content = response.json()
-        logger.debug("word created: %s", content)
-        self.id = content['id']
-        logger.debug("created word id = %s", self.id)
-
-    
-    def test_make_get_with_args_request(self):
+        
+    def test_make_request_get_with_args(self):
         """ test the make request method with a get action and a tuple of args """
 
         args_params = ('5',)
-        api = ('spanglish', 'word')
+        api = ('test', 'foo')
         response =  make_request(*args_params, action='GET', api=api, **{})
-        content = response.json()
         status_code = response.status_code
         url = response.url
+        headers = response.headers
+        elapsed = response.elapsed
+        request = response.request
 
         logger.debug("request => %s", response)
         logger.debug("request status_code: %s", status_code)
         logger.debug("request => %s", url)
-        logger.debug("content => %s", content)
-
-        logger.debug("created word id = %s", self.id)
+        logger.debug("headers => %s", headers)
+        logger.debug("elapsed => %s", elapsed)
+        logger.debug("request => %s", request.method)
         
-        assert_equal(200, status_code)
-        assert_true(content)
-        assert_equal('http://0.0.0.0:8000/spanglish/word/5/', url)
+        assert_equal(request.method, 'GET')
+        assert_equal(type(status_code), int)
+        assert_true(headers['Content-Type'] == 'text/html')
+        assert_equal(api_url + '/bar/5/', url)
 
 
 
-    def test_make_get_with_no_args_request(self):
+
+    def test_make_request_get_with_no_args(self):
         """ test the make request method with a get action and no args. """
 
-        api = ('spanglish', 'words')
+        api = ('test', 'foo')
         response =  make_request(action='GET', api=api, **{})
-        content = response.json()
+        headers = response.headers
         status_code = response.status_code
         url = response.url
+        elapsed = response.elapsed
+        request = response.request
 
         logger.debug("request => %s", response)
         logger.debug("request status_code: %s", status_code)
         logger.debug("request => %s", url)
-        logger.debug("content => %s", content)
-        logger.debug("created word id = %s", self.id)
+        logger.debug("header => %s", headers)
+        logger.debug("elapsed => %s", elapsed)
+        logger.debug("request => %s", request.method)
         
-        assert_equal(200, status_code)
-        assert_true(content)
-        assert_equal('http://0.0.0.0:8000/spanglish/words/', url)
+        assert_equal(request.method, 'GET')
+        assert_equal(type(status_code), int)
+        assert_true(headers['Content-Type'] == 'text/html')
+        assert_equal(api_url + '/bar/', url)
 
 
 
     def test_make_request_with_unknown_action(self):
         """ use an unknown action, expects a dic response with the error """
 
-        api = ('spanglish', 'word')
+        api = ('test', 'foo')
         params = {
-            'word': 'foo',
-            'word_en': 'bar',
+            'name': 'foo',
         }
-        args_params = ('10',)
+        args_params = ('1',)
 
         response = make_request(*args_params, action='FOO', api=api, **params)
         logger.debug("response: %s", response)
@@ -95,70 +85,88 @@ class TestRequester:
         
 
     def test_make_request_put(self):
-        """ expects to update a word and receive status_code 200 """
+        """ expects to use the patch action and returns a status_code """
 
-        api = ('spanglish', 'word')
+        api = ('test', 'foo')
         params = {
-            'word': 'testa12',
-            'word_en': 'testa12',
+            'name': 'test',
         }
-        args_params = (str(self.id),)
+        args_params = ('2',)
 
         response = make_request(*args_params, action='PUT', api=api, **params)
-        content = response.json()
+        headers = response.headers
         status_code = response.status_code
         url = response.url
+        elapsed = response.elapsed
+        request = response.request
 
         logger.debug("request => %s", response)
         logger.debug("request status_code: %s", status_code)
         logger.debug("request => %s", url)
-        logger.debug("content => %s", content)
-        logger.debug("created word id = %s", self.id)
+        logger.debug("headers => %s", headers)
+        logger.debug("elapsed => %s", elapsed)
+        logger.debug("request => %s", request.method)
         
-        assert_equal(200, status_code)
-        assert_true(content)
-        assert_equal('http://0.0.0.0:8000/spanglish/word/' + str(self.id) + '/', url)
+        assert_equal(request.method, 'PATCH')
+        assert_equal(type(status_code), int)
+        assert_true(headers['Content-Type'] == 'text/html')
+        assert_equal(api_url + '/bar/2/', url)
+
+
+    def test_make_request_post(self):
+        """ expects to use the post action and returns the POST action with a status_code """
+
+        api = ('test', 'foo')
+        params = {
+            'name': 'test',
+        }
+        args_params = ('12',)
+
+        response = make_request(*args_params, action='POST', api=api, **params)
+        headers = response.headers
+        status_code = response.status_code
+        url = response.url
+        elapsed = response.elapsed
+        request = response.request
+
+        logger.debug("request => %s", response)
+        logger.debug("request status_code: %s", status_code)
+        logger.debug("request => %s", url)
+        logger.debug("headers => %s", headers)
+        logger.debug("elapsed => %s", elapsed)
+        logger.debug("request => %s", request.method)
+        
+        assert_equal(request.method, 'POST')
+        assert_equal(type(status_code), int)
+        assert_true(headers['Content-Type'] == 'text/html')
+        assert_equal(api_url + '/bar/', url)
 
 
 
     def test_make_request_delete(self):
-        """ expects to delete a word and receive status_code 200 """
+        """ expects to return a delete action and status_code """
 
-        api = ('spanglish', 'word')
-        params = {}
-        args_params = (str(self.id),)
+        api = ('test', 'foo')
+        params = {
+            'name': 'test',
+        }
+        args_params = ('12',)
 
-        response = make_request(*args_params, action='DELETE', api=api)
-        #content = response.json()
+        response = make_request(*args_params, action='DELETE', api=api, **params)
+        headers = response.headers
         status_code = response.status_code
-        #url = response.url
+        url = response.url
+        elapsed = response.elapsed
+        request = response.request
 
         logger.debug("request => %s", response)
         logger.debug("request status_code: %s", status_code)
-        #logger.debug("request => %s", url)
-        #logger.debug("content => %s", content)
-
-        assert_equal(204, status_code)
-        #assert_true(content)
-        #assert_equal('http://0.0.0.0:8000/spanglish/word/10/', url)
-
-
-    def tearDown(self):
-
-        logger.debug("tearDown")
-        logger.debug("created word id = %s", self.id)
-        #logger.debug("created word test_id to be deleted = %s", self.test_id)
-        api = ('spanglish', 'word')
-        params = {}
-        args_params = (str(self.id),)
-        response = make_request(*args_params, action='DELETE', api=api, **params)
-        status_code = response.status_code
-
-        logger.debug("request => %s", response)
-
-        #args_params = (str(self.test_id),)
-        #response = make_request(*args_params, action='DELETE', api=api, **params)
-        #status_code = response.status_code
-
-
-        #logger.debug("request => %s", response)
+        logger.debug("request => %s", url)
+        logger.debug("headers => %s", headers)
+        logger.debug("elapsed => %s", elapsed)
+        logger.debug("request => %s", request.method)
+        
+        assert_equal(request.method, 'DELETE')
+        assert_equal(type(status_code), int)
+        assert_true(headers['Content-Type'] == 'text/html')
+        assert_equal(api_url + '/bar/12/', url)

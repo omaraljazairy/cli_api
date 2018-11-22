@@ -22,7 +22,7 @@ def make_request( *args, action='str', api=dict,  **kwargs):
 
     api = conf.API[api[0]][api[1]] # get the api url from the config
     logger.debug("api: %s", api)
-    api_request = conf.URL + api # append the api path to the url
+    api_request = conf.API['uri'] + api # append the api path to the url
     token =  'Bearer '.__add__(get_token()) # get the token from the get_token method.
 
     # create a header object which can hold other values than the token

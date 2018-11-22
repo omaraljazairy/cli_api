@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 logger = get_logger(loggername='tokens')
 cache = redis.Redis(host=conf.CACHE['REDIS']['URL'], password=conf.CACHE['REDIS']['PASSWORD'])
+url = conf.API['uri']
 
 
 def get_token(user='omar'):
@@ -79,7 +80,7 @@ def set_token(user='omar'):
     it will throw an exception if the status code not 200.
     """
 
-    api_request = conf.URL + conf.API['token']['token']
+    api_request = url + conf.API['token']['token']
     response = requests.post(api_request, data={'username': user, 'password': conf.AUTH[user]})
     data = response.json()
     status_code = response.status_code
@@ -117,7 +118,7 @@ def refresh_token():
     if refresh_token:
         refresh_token = refresh_token.decode('ASCII')
         logger.debug("refresh token found in the cache")
-        api_request = conf.URL + conf.API['token']['refresh']
+        api_request = url + conf.API['token']['refresh']
         response = requests.post(api_request, data={'refresh': refresh_token})
         data = response.json()
         status_code = response.status_code
@@ -156,7 +157,7 @@ def verify_token(token=str):
     it will return False.
     """
 
-    api_request = conf.URL + conf.API['token']['verify']
+    api_request = url + conf.API['token']['verify']
     response = requests.post(api_request, data={'token': token})
 
     logger.debug("statuscode from verify: %s", response.status_code)
