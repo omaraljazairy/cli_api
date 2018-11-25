@@ -19,4 +19,11 @@ API={
             'category': '/spanglish/category/',
             'language': '/spanglish/languages/',
         },
+    'currency':
+        {
+            'code': '/currency/code/', 
+            'convert': '/currency/convert/', 
+            'rate': '/currency/rate/', 
+            'rates': '/currency/rates/',
+        },
     }

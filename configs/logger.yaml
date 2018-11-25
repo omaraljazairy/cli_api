@@ -107,6 +107,14 @@ loggers:
         propagate: no
 
 
+    currency:
+
+        level: DEBUG
+
+        handlers: [debug_file_handler]
+
+        propagate: no
+
 
 root:
 
