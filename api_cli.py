@@ -1,9 +1,10 @@
 import click
-from spanglish import add_word
-import spanglish
+from apis.currency import get_code
 
-
-apis = spanglish.API
+apis = {
+    1: 'currency',
+    2: 'spanglish',
+    }
 
 def main():
     """ 
@@ -26,7 +27,7 @@ def run_api(api):
     click.echo("api option : %s is chosen" % apis.get(int(api), False))
 
     if api == 1:
-        add_word()
+        get_code()
         
     elif api == 2:
         args = {'word':'hello', 'hola amigo': 'hello my friend'}

@@ -1,6 +1,6 @@
 import click
-from fedal_cli.services.logger import get_logger
-from fedal_cli.services.requester import make_request
+from services.logger import get_logger
+from services.requester import make_request
 
 logger = get_logger(loggername='currency')
 api_name = 'currency'
