@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 
 cache = redis.Redis(host=conf.CACHE['REDIS']['URL'], password=conf.CACHE['REDIS']['PASSWORD'])
 logger = get_logger(loggername='test')
-api_url = conf.API['uri']
+api_url = conf.API_URL
 
 
 class TestRequester:
