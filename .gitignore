@@ -11,3 +11,4 @@ settings.py
 *.pyc
 *.py~
 .DS_Store
+*.xml

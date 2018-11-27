@@ -1,9 +1,30 @@
 import click
 from services.logger import get_logger
 from services.requester import make_request
+import sys
 
 logger = get_logger(loggername='currency')
 api_name = 'currency'
+
+funcs = {
+    1: ('currency code', 'get_code'),
+    2: ('currency amount converter', 'convert_currency'),
+    3: ('currency current rate', 'get_rate'),
+    4: ('currency rate for all currencies', 'get_all_rates'),
+}
+
+@click.command()
+@click.option('--function_id', default=1, type=click.IntRange(1, len(funcs)),  prompt='function option: ')
+def run_function(function_id):
+    """ based on the function number chosen by the user, it will execute the function """
+
+    currency = sys.modules[__name__] # to be used by the getattr
+
+    global funcs
+    funcName = funcs[function_id][1] # get the function name from the global dictionary funcs
+    getattr(currency, funcName)() #execute the chosen function
+    
+
 
 @click.command()
 @click.option('--currency', type=click.Choice(['EUR', 'USD', 'CAD', 'GBP']), default='EUR', prompt='currency code ')
@@ -99,3 +120,4 @@ def get_all_rates(base):
     logger.debug("today's currencies for the {} are {}".format(base, content))
 
     click.echo("today's currencies for the %s are %s" % (base, content), nl=False)
+

@@ -24,6 +24,6 @@ API={
             'code': '/currency/code/', 
             'convert': '/currency/convert/', 
             'rate': '/currency/rate/', 
-            'rates': '/currency/rates/',
+            'rates': '/currency/rates/', 
         },
     }
