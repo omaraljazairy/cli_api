@@ -16,7 +16,7 @@ class TestCurrency(TestCase):
         logger.debug("result.output: {}".format(result.output))
 
         self.assertTrue(result.exit_code == 0)
-        self.assertEqual('currency code is €', result.output)
+        self.assertEqual('currency code is €\n', result.output)
 
 
 

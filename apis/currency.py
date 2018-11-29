@@ -40,7 +40,7 @@ def get_code(currency):
     content =  response.json()
     logger.debug("response currency {}".format(content))
     logger.debug("response currency statuscode {}".format(status_code))
-    click.echo("currency code is %s" % content, nl=False)
+    click.echo("currency code is %s" % content, nl=True)
     
 
 @click.command()
@@ -68,7 +68,7 @@ def convert_currency(base, currency, amount):
     logger.debug("response currency converter statuscode {}".format(status_code))
     logger.debug("the amount {} {} in {} is {}".format(amount, base, currency, content))
 
-    click.echo("the amount %s %s in %s is %s" % (amount, base, currency, content), nl=False)
+    click.echo("the amount %s %s in %s is %s" % (amount, base, currency, content), nl=True)
 
 
 
@@ -95,7 +95,7 @@ def get_rate(base, currency):
     logger.debug("currency rate converter statuscode {}".format(status_code))
     logger.debug("today's currency for the {} in {} is {}".format(base, currency, content))
 
-    click.echo("today's currency for the %s in %s is %s" % (base, currency, content), nl=False)
+    click.echo("today's currency for the %s in %s is %s" % (base, currency, content), nl=True)
 
 
 
@@ -119,5 +119,5 @@ def get_all_rates(base):
     logger.debug("currency rates statuscode {}".format(status_code))
     logger.debug("today's currencies for the {} are {}".format(base, content))
 
-    click.echo("today's currencies for the %s are %s" % (base, content), nl=False)
+    click.echo("today's currencies for the %s are %s" % (base, content), nl=True)
 

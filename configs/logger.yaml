@@ -116,6 +116,16 @@ loggers:
         propagate: no
 
 
+
+    urllib3.connectionpool:
+
+        level: DEBUG
+
+        handlers: [debug_file_handler]
+
+        propagate: no
+
+
 root:
 
     level: DEBUG
