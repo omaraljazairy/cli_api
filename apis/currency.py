@@ -54,11 +54,8 @@ def convert_currency(base, currency, amount):
     """
 
     api = (api_name, 'convert')
-    params = {
-        'base': base,
-        'currency': currency,
-        'amount': amount,
-    }
+    params = {'base': base, 'currency': currency, 'amount': amount}
+    
 
     logger.debug("params: {}".format(params))
 

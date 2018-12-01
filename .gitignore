@@ -12,3 +12,4 @@ settings.py
 *.py~
 .DS_Store
 *.xml
+logs/*

@@ -39,7 +39,7 @@ def make_request( *args, action='str', api=dict,  **kwargs):
 
         # if the *args arg contains any values, it will be converted to a string with a / seperater
         api_request = api_request + '/'.join(args) + '/' if args else api_request # + args_params
-        response = requests.get(api_request, data=kwargs, headers=header)
+        response = requests.get(api_request, params=kwargs, headers=header)
 
         logger.debug("response: %s", response)
 
