@@ -11,7 +11,7 @@ def make_request( *args, action='str', api=dict,  **kwargs):
     """ 
     makes the http request and returns a response. It takes the following args:
     1- *args: this is an optional args tuple used for the get parameters request. 
-            values will be split by a / at the end of the api.
+            values will be split by a / at the end of the api. all values have to be a string.
     2- action: this is mandatory str type value that determines the action used in the request.
                possible actions are GET, POST, PUT and DELETE. The value is case insensative.
     3- api: this is a mandatory dict type value that determines the api and it's path to be used.
@@ -33,12 +33,15 @@ def make_request( *args, action='str', api=dict,  **kwargs):
     logger.debug("api_request: %s ", api_request)
     logger.debug("action: %s", action)
     logger.debug("header: %s", header)
+    logger.debug("args: %s", args)
 
 
     if action.upper() == 'GET':
 
         # if the *args arg contains any values, it will be converted to a string with a / seperater
+        
         api_request = api_request + '/'.join(args) + '/' if args else api_request # + args_params
+        logger.debug("get api_request: %s", api_request)
         response = requests.get(api_request, params=kwargs, headers=header)
 
         logger.debug("response: %s", response)

@@ -11,13 +11,17 @@ API={
         },
     'spanglish':
         {
-            'words': '/spanglish/words/',
-            'word': '/spanglish/word/',
-            'verb': '/spanglish/verbs/',
-            'sentence': '/spanglish/sentences/',
+            'language': '/spanglish/language/',
+            'languages': '/spanglish/languages/',
             'categories': '/spanglish/categories/',
             'category': '/spanglish/category/',
-            'language': '/spanglish/languages/',
+            'words': '/spanglish/words/',
+            'word': '/spanglish/word/',
+            'verb': '/spanglish/verb/',
+            'verbs': '/spanglish/verbs/',
+            'sentence': '/spanglish/sentence/',
+            'sentences': '/spanglish/sentences/',
+
         },
     'currency':
         {
