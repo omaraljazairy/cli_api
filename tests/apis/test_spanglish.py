@@ -18,9 +18,9 @@ class TestCurrency(TestCase):
         """ runs before any test """
 
         logger.debug("setUp")
-        random_number = random.randint(1,101)
-        logger.debug("random_number generated: %s", random_number)
-        category_name = 'test'.__add__(str(random_number))
+        self.random_number = random.randint(1,101)
+        logger.debug("random_number generated: %s", self.random_number)
+        category_name = 'test'.__add__(str(self.random_number))
         params = {'name': category_name}
         api = ('spanglish', 'category')
         response = make_request(api=api, action='POST', **params)
@@ -71,11 +71,123 @@ class TestCurrency(TestCase):
 
         get_category = getattr(spanglish, 'get_category')
         runner = CliRunner()
-        result = runner.invoke(get_category, ['--category_id', 3])
+        result = runner.invoke(get_category, ['--category_id', self.category_id])
 
         logger.debug("result.output: {}".format(result.output))
         
         self.assertTrue(result.exit_code == 0)
+
+
+
+    def test_get_category_error(self):
+        """ provide a category_id that doesn't exist and expect an error """
+
+        get_category = getattr(spanglish, 'get_category')
+
+        random_number = self.random_number + 999
+                
+        runner = CliRunner()
+        result = runner.invoke(get_category, ['--category_id', random_number])
+
+        logger.debug("result.output: {}".format(result.output))
+        logger.debug("result.exit_code: {}".format(result.exit_code))
+        
+        self.assertTrue(result.exit_code == 1)
+
+
+    def test_add_category(self):
+        """ provide a name for the category and expect the function to exit with 0 """
+
+        add_category = getattr(spanglish, 'add_category')
+
+        random_number = self.random_number + 10000
+        category_name = 'test'.__add__(str(random_number))
+
+        logger.debug("category_name: {}".format(category_name))
+
+        runner = CliRunner()
+        result = runner.invoke(add_category, ['--name', category_name ])
+        logger.debug("result.output: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 0)
+
+
+    def test_add_category_error(self):
+        """ provide a duplicate name for the category and expect the function to exit with error """
+
+        add_category = getattr(spanglish, 'add_category')
+
+        category_name = 'test'.__add__(str(self.random_number))
+
+        logger.debug("category_name: {}".format(category_name))
+
+        runner = CliRunner()
+        result = runner.invoke(add_category, ['--name', category_name ])
+        logger.debug("result.output: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 1)
+
+
+
+    def test_update_category(self):
+        """ expects to update a category using the self.category_id and a random name from the setUp function """
+
+        update_category = getattr(spanglish, 'update_category')
+
+        random_number = self.random_number + 1000
+        category_name = 'test'.__add__(str(random_number))
+
+        logger.debug("category_name: {}".format(category_name))
+
+        runner = CliRunner()
+        result = runner.invoke(update_category, ['--category_id', self.category_id, '--category_name', category_name])
+
+        logger.debug("result.output from update_category: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 0)
+
+
+    def test_update_category_error(self):
+        """ expects to update a non existing category_id and return an error """
+
+        update_category = getattr(spanglish, 'update_category')
+
+        random_number = self.random_number + 1000
+        category_name = 'test'.__add__(str(random_number))
+
+        logger.debug("category_name: {}".format(category_name))
+
+        runner = CliRunner()
+        result = runner.invoke(update_category, ['--category_id', random_number, '--category_name', category_name])
+
+        logger.debug("result.output from update_category: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 1)
+
+
+
+    def test_delete_category(self):
+        """ provide the category_id as parameter in the request and expect exit_code 0 """
+
+        delete_category = getattr(spanglish, 'delete_category')
+        runner = CliRunner()
+        result = runner.invoke(delete_category, ['--category_id', self.category_id])
+
+        logger.debug("result.output: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 0)
+
+
+    def test_delete_category_error(self):
+        """ provide a non existing category_id as parameter and expect exit_code 1 """
+
+        delete_category = getattr(spanglish, 'delete_category')
+        runner = CliRunner()
+        result = runner.invoke(delete_category, ['--category_id', 0])
+
+        logger.debug("result.output: {}".format(result.output))
+        
+        self.assertTrue(result.exit_code == 1)
 
 
         

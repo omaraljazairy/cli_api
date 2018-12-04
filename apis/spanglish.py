@@ -64,18 +64,19 @@ def get_categories():
     #params = {'base': base, 'currency': currency, 'amount': amount}
     response = make_request(api=api, action='get', **{})
     status_code = response.status_code
-    content =  response.json()
+    content =  response.text
 
-    logger.debug("response from spanglish categories: {}".format(response))
-    logger.debug("response statuscode from spanglish categories: {}".format(status_code))
-    logger.debug("response content from spanglish categories: {}".format(content))
+    msg = str(status_code) + ' : ' + content
+    
+    logger.debug("response from spanglish update category: {}".format(response))
+    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
 
-    click.echo("response message: %s " % content)
+    click.echo("response message: %s " % msg)
     
 
 
 @click.command()
-@click.option('--category_id', type=int)
+@click.option('--category_id', type=int, prompt='CategoryId')
 def get_category(category_id):
     """ takes the category_id as an argument and returns the category details """
 
@@ -85,12 +86,100 @@ def get_category(category_id):
 
     response = make_request(*args_params, api=api, action='get',  **{})
     status_code = response.status_code
-    content =  response.json()
+    content =  response.text
+
+    msg = str(status_code) + ' : ' + content
+    
+    if status_code >= 300:
+
+        click.echo("response error message: %s " % msg)
+        raise click.Abort()
+    
+
+    logger.debug("response from spanglish update category: {}".format(response))
+    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+
+    click.echo("response message: %s " % msg)
+    
+
+@click.command()
+@click.option('--name', type=str, prompt='Category Name', help="the category name that should be added. make sure it's unique")
+def add_category(name):
+    """ take one parameter, name, and send it to the api. returns back the result from the api """
+
+    params = {'name': name}
+    api = (api_name, 'category')
+    
+    response = make_request(api=api, action='post',  **params)
+    status_code = response.status_code
+    content =  response.text
+
+    msg = str(status_code) + ' : ' + content
+    
+    if status_code >= 300:
+
+        click.echo("response error message: %s " % msg)
+        raise click.Abort()
+    
+
+    logger.debug("response from spanglish update category: {}".format(response))
+    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+
+    click.echo("response message: %s " % msg)
+
+
+@click.command()
+@click.option('--category_id', type=int, prompt='CategoryId')
+@click.option('--category_name', type=str, prompt='Category Name')
+def update_category(category_id, category_name):
+    """ takes the category_id and a category_name as arguments and returns the update result """
+
+    args_params = (str(category_id),)
+    params = {'name' : category_name}
+    api = (api_name, 'category')
+    logger.debug("args_params received: {}".format(args_params))
+
+    response = make_request(*args_params, api=api, action='put',  **params)
+    status_code = response.status_code
+    content =  response.text
+
+    msg = str(status_code) + ' : ' + content
+    
+    if status_code >= 300:
+
+        click.echo("response error message: %s " % msg)
+        raise click.Abort()
+    
+
+    logger.debug("response from spanglish update category: {}".format(response))
+    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+
+
+    click.echo("response message: %s " % msg)
+
+
+@click.command()
+@click.option('--category_id', type=int, prompt='CategoryId')
+def delete_category(category_id):
+    """ takes the category_id as an argument and returns the delete result """
+
+    args_params = (str(category_id),)
+    api = (api_name, 'category')
+    logger.debug("args_params received: {}".format(args_params))
+
+    response = make_request(*args_params, api=api, action='delete',  **{})
+    status_code = response.status_code
+    content =  response.text
+
+    msg = str(status_code) + ' : ' + content
+    
+    if status_code >= 300:
+
+        click.echo("response error message: %s " % msg)
+        raise click.Abort()
 
     logger.debug("response from spanglish category: {}".format(response))
     logger.debug("response statuscode from spanglish category: {}".format(status_code))
-    logger.debug("response content from spanglish category: {}".format(content))
 
-    click.echo("response message: %s " % content)
-    
-    
+    click.echo("response message: %s " % msg)
+ 
