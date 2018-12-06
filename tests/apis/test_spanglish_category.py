@@ -1,4 +1,4 @@
-from fedal_cli.apis import spanglish
+from fedal_cli.apis.spanglish import category
 from fedal_cli.services.logger import get_logger
 from fedal_cli.services.requester import make_request
 from click.testing import CliRunner
@@ -7,11 +7,7 @@ import random
 
 logger = get_logger(loggername='spanglish')
 
-class TestCurrency(TestCase):
-
-    #@classmethod
-    #def string_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    #    return ''.join(random.choice(chars) for _ in range(size))
+class TestSpanglishCategory(TestCase):
 
 
     def setUp(self):
@@ -36,28 +32,11 @@ class TestCurrency(TestCase):
         logger.debug("category_id created: %d", self.category_id)
         
 
-        
-    def test_funcs_dict_tuple(self):
-        """ expects the attribute funcs to be a dict with tuples """
-
-        funcs = getattr(spanglish, 'funcs')
-        values = {type(v) for v in funcs.values()}
-        value_type = list(values)[0]
-        
-        logger.debug("funcs: {}".format(funcs))
-        logger.debug("values: {}".format(values))
-        logger.debug("type values: {}".format(value_type))
-
-        self.assertTrue(type(funcs) == dict) # expect type to be a dict
-        self.assertEqual(len(values), 1) # expects one type only
-        self.assertEqual(value_type, tuple ) # expect the type to be tuple
-        self.assertTrue(len(funcs) == 25)
-
 
     def test_get_categories(self):
         """ provide no params and get a list of all categories """
 
-        get_categories = getattr(spanglish, 'get_categories')
+        get_categories = getattr(category, 'get_categories')
         runner = CliRunner()
         result = runner.invoke(get_categories, [])
 
@@ -69,7 +48,7 @@ class TestCurrency(TestCase):
     def test_get_category(self):
         """ provide a parameter in the request and expect exit_code 0 """
 
-        get_category = getattr(spanglish, 'get_category')
+        get_category = getattr(category, 'get_category')
         runner = CliRunner()
         result = runner.invoke(get_category, ['--category_id', self.category_id])
 
@@ -82,7 +61,7 @@ class TestCurrency(TestCase):
     def test_get_category_error(self):
         """ provide a category_id that doesn't exist and expect an error """
 
-        get_category = getattr(spanglish, 'get_category')
+        get_category = getattr(category, 'get_category')
 
         random_number = self.random_number + 999
                 
@@ -98,9 +77,9 @@ class TestCurrency(TestCase):
     def test_add_category(self):
         """ provide a name for the category and expect the function to exit with 0 """
 
-        add_category = getattr(spanglish, 'add_category')
+        add_category = getattr(category, 'add_category')
 
-        random_number = self.random_number + 10000
+        random_number = self.random_number + 1000
         category_name = 'test'.__add__(str(random_number))
 
         logger.debug("category_name: {}".format(category_name))
@@ -115,7 +94,7 @@ class TestCurrency(TestCase):
     def test_add_category_error(self):
         """ provide a duplicate name for the category and expect the function to exit with error """
 
-        add_category = getattr(spanglish, 'add_category')
+        add_category = getattr(category, 'add_category')
 
         category_name = 'test'.__add__(str(self.random_number))
 
@@ -132,7 +111,7 @@ class TestCurrency(TestCase):
     def test_update_category(self):
         """ expects to update a category using the self.category_id and a random name from the setUp function """
 
-        update_category = getattr(spanglish, 'update_category')
+        update_category = getattr(category, 'update_category')
 
         random_number = self.random_number + 1000
         category_name = 'test'.__add__(str(random_number))
@@ -150,7 +129,7 @@ class TestCurrency(TestCase):
     def test_update_category_error(self):
         """ expects to update a non existing category_id and return an error """
 
-        update_category = getattr(spanglish, 'update_category')
+        update_category = getattr(category, 'update_category')
 
         random_number = self.random_number + 1000
         category_name = 'test'.__add__(str(random_number))
@@ -169,7 +148,7 @@ class TestCurrency(TestCase):
     def test_delete_category(self):
         """ provide the category_id as parameter in the request and expect exit_code 0 """
 
-        delete_category = getattr(spanglish, 'delete_category')
+        delete_category = getattr(category, 'delete_category')
         runner = CliRunner()
         result = runner.invoke(delete_category, ['--category_id', self.category_id])
 
@@ -181,13 +160,14 @@ class TestCurrency(TestCase):
     def test_delete_category_error(self):
         """ provide a non existing category_id as parameter and expect exit_code 1 """
 
-        delete_category = getattr(spanglish, 'delete_category')
+        delete_category = getattr(category, 'delete_category')
         runner = CliRunner()
         result = runner.invoke(delete_category, ['--category_id', 0])
 
         logger.debug("result.output: {}".format(result.output))
         
         self.assertTrue(result.exit_code == 1)
+
 
 
         

@@ -15,32 +15,6 @@ funcs = {
     3: ('add a category', 'add_category'),
     4: ('update a category', 'update_category'),
     5: ('delete category', 'delete_category'),
-
-    6: ('get all languages', 'get_languages'),
-    7: ('get a language', 'get_language'),
-    8: ('add a language', 'add_language'),
-    9: ('update a language', 'update_language'),
-    10: ('delete a language', 'delete_language'),
-
-    11: ('get all words', 'get_words'),
-    12: ('get a word', 'get_word'),
-    13: ('add a word', 'add_word'),
-    14: ('update a word', 'update_word'),
-    15: ('delete word', 'delete_word'),
-
-    16: ('get all verbs', 'get_verbs'),
-    17: ('get a verb', 'get_verb'),
-    18: ('add a verb', 'add_verb'),
-    19: ('update a verb', 'update_verb'),
-    20: ('delete verb', 'delete_verb'),
-
-
-    21: ('get all sentences', 'get_sentences'),
-    22: ('get a sentence', 'get_sentence'),
-    23: ('add a sentence', 'add_sentence'),
-    24: ('update a sentence', 'update_sentence'),
-    25: ('delete sentence', 'delete_sentence'),
-
 }
 
 @click.command()

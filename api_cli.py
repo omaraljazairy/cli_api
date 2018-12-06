@@ -1,5 +1,5 @@
 import click
-from apis import currency
+from apis import currency, spanglish_apis
 import inspect
 
 apis = {
@@ -24,9 +24,18 @@ def main():
 
         currency.run_function()
 
+
+    elif api == 2:
+        for function_id, name in enumerate(spanglish_apis.funcs.values(), 1):            
+            print(function_id, name[0])
+
+        spanglish_apis.run_function()
+
     else:
          print("nothing yet")   
 
+
+    #menu.run_function()
 
 if __name__ == "__main__":
     main()
