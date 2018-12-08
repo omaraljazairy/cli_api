@@ -1,4 +1,3 @@
-
 import click
 from services.requester import make_request
 from services.logger import get_logger
@@ -22,11 +21,11 @@ funcs = {
 def run_function(function_id):
     """ based on the function number chosen by the user, it will execute the function """
 
-    spanglish = sys.modules[__name__] # to be used by the getattr
+    category = sys.modules[__name__] # to be used by the getattr
 
     global funcs
     funcName = funcs[function_id][1] # get the function name from the global dictionary funcs
-    getattr(spanglish, funcName)() #execute the chosen function
+    getattr(category, funcName)() #execute the chosen function
 
 
 
@@ -70,8 +69,8 @@ def get_category(category_id):
         raise click.Abort()
     
 
-    logger.debug("response from spanglish update category: {}".format(response))
-    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+    logger.debug("response from spanglish get category: {}".format(response))
+    logger.debug("response statuscode from spanglish get category: {}".format(status_code))
 
     click.echo("response message: %s " % msg)
     
@@ -79,7 +78,7 @@ def get_category(category_id):
 @click.command()
 @click.option('--name', type=str, prompt='Category Name', help="the category name that should be added. make sure it's unique")
 def add_category(name):
-    """ take one parameter, name, and send it to the api. returns back the result from the api """
+    """ takes one parameter, name, and send it to the api. returns back the result from the api """
 
     params = {'name': name}
     api = (api_name, 'category')
@@ -96,8 +95,8 @@ def add_category(name):
         raise click.Abort()
     
 
-    logger.debug("response from spanglish update category: {}".format(response))
-    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+    logger.debug("response from spanglish add category: {}".format(response))
+    logger.debug("response statuscode from spanglish add category: {}".format(status_code))
 
     click.echo("response message: %s " % msg)
 
