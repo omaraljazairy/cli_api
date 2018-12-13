@@ -9,11 +9,11 @@ logger = get_logger(loggername='spanglish')
 
 # a dict to show all the options and their api functions.
 funcs = {
-    1: ('Categories', 'category'),
-    2: ('Languages', 'language'),
-    3: ('Words', 'word'),
-    4: ('Verbs', 'verb'),
-    5: ('Sentences', 'sentence'),
+    1: ('Categories', 'apis.spanglish.category'),
+    2: ('Languages', 'apis.spanglish.language'),
+    3: ('Words', 'apis.spanglish.word'),
+    4: ('Verbs', 'apis.spanglish.verb'),
+    5: ('Sentences', 'apis.spanglish.sentence'),
 }
 
 
@@ -22,12 +22,13 @@ funcs = {
 def run_function(function_id):
     """ based on the function number chosen by the user, it will execute the function """
 
-    #category = __import__('apis.spanglish.category')
-    category = importlib.import_module('apis.spanglish.category')
-    #sys.modules['spanglish.category'] # to be used by the getattr
+    global funcs
 
-    for function_id, name in enumerate(category.funcs.values(), 1):
+    logger.debug("module chosen: {}".format(funcs[function_id][1]))
+    module = importlib.import_module(funcs[function_id][1])
+
+    for function_id, name in enumerate(module.funcs.values(), 1):
         print(function_id, name[0])
 
 
-    category.run_function()
+    module.run_function()

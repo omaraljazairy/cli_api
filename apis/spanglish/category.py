@@ -41,8 +41,8 @@ def get_categories():
 
     msg = str(status_code) + ' : ' + content
     
-    logger.debug("response from spanglish update category: {}".format(response))
-    logger.debug("response statuscode from spanglish update category: {}".format(status_code))
+    logger.debug("response from spanglish get categories: {}".format(response))
+    logger.debug("response statuscode from spanglish get categories: {}".format(status_code))
 
     click.echo("response message: %s " % msg)
     
