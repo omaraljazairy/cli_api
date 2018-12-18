@@ -8,4 +8,3 @@ At the moment I'm setting this tool to communicate with the Spnglish API. I use 
 There are shared services which will be used by different modules like the logger, requester, tokens.
 
 At the moment i'm setting up the tokens service to handle the retrieval or update of the token used in the header of the requests. this is needed for the authentication.
-
