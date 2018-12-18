@@ -9,4 +9,3 @@ There are shared services which will be used by different modules like the logge
 
 At the moment i'm setting up the tokens service to handle the retrieval or update of the token used in the header of the requests. this is needed for the authentication.
 
-
