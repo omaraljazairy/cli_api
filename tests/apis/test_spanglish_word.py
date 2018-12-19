@@ -7,6 +7,7 @@ import random
 
 logger = get_logger(loggername='spanglish')
 
+
 class TestSpanglishWord(TestCase):
 
 
@@ -14,6 +15,7 @@ class TestSpanglishWord(TestCase):
         """ runs before any test """
 
         logger.debug("setUp")
+
         self.random_number = random.randint(1,101)
         logger.debug("random_number generated: %s", self.random_number)
         word = 'test'.__add__(str(self.random_number))
@@ -102,7 +104,7 @@ class TestSpanglishWord(TestCase):
         
         
 
-    def test_update_word(self):
+    def xtest_update_word(self):
         """ try to update the word_en and expect to exit with code 0 """
 
         update_word = getattr(word, 'update_word')
