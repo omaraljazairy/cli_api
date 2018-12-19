@@ -15,11 +15,7 @@ class TestTokens:
     def setUp(self):
         """ set up test before every function is executed. delete cache """
 
-        cache.delete('token')
-        cache.delete('refresh')
-        cache.delete('last_verified')
-        [cache.delete(key) for key in conf.THROTTLE_KEYS]
-
+        cache.flushall()
         logger.debug("all cached keys are deleted")
         logger.debug("setup_func executed")
         
@@ -363,8 +359,5 @@ class TestTokens:
 
         logger.debug("teardown_func executed")
 
-        cache.delete('token')
-        cache.delete('refresh')
-        cache.delete('last_verified')
-
+        cache.flushall()
         logger.debug("all cached keys are deleted")
