@@ -3,6 +3,7 @@ from fedal_cli.services.logger import get_logger
 from fedal_cli.services.requester import make_request
 from click.testing import CliRunner
 from unittest import TestCase
+from fedal_cli.tests.fixtures.spanglish import create_word, remove_word
 import random
 
 logger = get_logger(loggername='spanglish')
@@ -11,6 +12,16 @@ logger = get_logger(loggername='spanglish')
 class TestSpanglishWord(TestCase):
 
 
+    @classmethod
+    def setUpClass(cls):
+        logger.debug("setup CLASS")
+        create_word()
+
+    @classmethod    
+    def tearDownClass(cls):
+        logger.debug("teardown CLASS")
+        remove_word()
+    
     def setUp(self):
         """ runs before any test """
 
