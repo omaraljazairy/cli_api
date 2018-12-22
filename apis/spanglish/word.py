@@ -104,10 +104,10 @@ def add_word(word, word_en, category, language):
 
 @click.command()
 @click.option('--word_id', type=int, prompt='WordId')
-@click.option('--word', type=str, default=None, required=False, prompt='Word')
-@click.option('--word_en', type=str, default=None, required=False, prompt='Word_en')
-@click.option('--category', type=str, default=None, required=False, prompt='category')
-@click.option('--language', type=str, default=None, required=False, prompt='language')
+@click.option('--word', type=str, default=None, required=False)
+@click.option('--word_en', type=str, default=None, required=False)
+@click.option('--category', type=str, default=None, required=False)
+@click.option('--language', type=str, default=None, required=False)
 def update_word(word_id, word=None, word_en=None, category=None, language=None):
     """ takes the word_id as arguments and returns the update result """
 

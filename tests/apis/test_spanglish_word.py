@@ -3,7 +3,6 @@ from fedal_cli.services.logger import get_logger
 from fedal_cli.services.requester import make_request
 from click.testing import CliRunner
 from unittest import TestCase
-from fedal_cli.tests.fixtures.spanglish import create_word, remove_word
 import random
 
 logger = get_logger(loggername='spanglish')
@@ -12,16 +11,6 @@ logger = get_logger(loggername='spanglish')
 class TestSpanglishWord(TestCase):
 
 
-    @classmethod
-    def setUpClass(cls):
-        logger.debug("setup CLASS")
-        create_word()
-
-    @classmethod    
-    def tearDownClass(cls):
-        logger.debug("teardown CLASS")
-        remove_word()
-    
     def setUp(self):
         """ runs before any test """
 
@@ -31,8 +20,8 @@ class TestSpanglishWord(TestCase):
         logger.debug("random_number generated: %s", self.random_number)
         word = 'test'.__add__(str(self.random_number))
         word_en = 'test_en_'.__add__(str(self.random_number))
-        category = 'Animal'
-        language = 'ES'
+        category = 'Entertainment'
+        language = 'EN'
         
         params = {
             'word': word,
@@ -40,16 +29,25 @@ class TestSpanglishWord(TestCase):
             'category': category,
             'language': language,
         }
+
         api = ('spanglish', 'word')
+
         response = make_request(api=api, action='POST', **params)
-        content = response.json()
         status_code = response.status_code
+            
+        if status_code == 201:
+            content = response.json()
+            self.word_id = content['id']
+
+            logger.debug("word_id created: %d", self.word_id)
+
+        else:
+            content = response.text
+            self.word_id = 1
+            
+
         logger.debug("response status_code: %s", status_code)
-        logger.debug("response content: %s", content)
-
-        self.word_id = content['id'] if status_code == 201 else 0
-
-        logger.debug("word_id created: %d", self.word_id)
+        logger.debug("word response content: %s", content)
 
 
 
@@ -103,8 +101,8 @@ class TestSpanglishWord(TestCase):
 
         word_es = 'test'.__add__(str(random_number))
         word_en = 'test_en_'.__add__(str(random_number))
-        category = 'Animal'
-        language = 'ES'
+        category = 'Entertainment'
+        language = 'EN'
 
         runner = CliRunner()
         result = runner.invoke(add_word, ['--word', word_es, '--word_en', word_en, '--category', category, '--language', language])
@@ -115,15 +113,17 @@ class TestSpanglishWord(TestCase):
         
         
 
-    def xtest_update_word(self):
+    def test_update_word(self):
         """ try to update the word_en and expect to exit with code 0 """
 
         update_word = getattr(word, 'update_word')
 
+        logger.debug("word_id generated for this test: {}".format(self.word_id))
+        
         runner = CliRunner()
-        result = runner.invoke(update_word, ['--word_id', self.word_id, '--word', None, '--word_en', 'bla', '--category', None, '--language', None])
+        result = runner.invoke(update_word, ['--word_id', int(self.word_id), '--word', 'blbl'])
 
-        logger.debug("result output: {}".format(result.output))
+        logger.debug("update result output: {}".format(result.output))
 
         self.assertTrue(result.exit_code == 0)
         
