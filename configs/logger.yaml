@@ -89,6 +89,15 @@ loggers:
         propagate: no
 
 
+    spanglish_fixtures:
+
+        level: DEBUG
+
+        handlers: [debug_file_handler]
+
+        propagate: no
+
+
     test:
 
         level: DEBUG
