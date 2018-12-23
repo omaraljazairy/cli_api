@@ -65,7 +65,7 @@ def setup_language():
 
 
 def setup_category():
-    """ create a category with id 1"""
+    """ create two categories with id 1 & 2"""
     
     logger.debug("setup category fixture")
 
@@ -73,7 +73,7 @@ def setup_category():
 
     try:
         cursor = conn.cursor()
-        cursor.execute(""" insert into spanglish_category (id, name, added) values (1, 'Entertainment', NOW()); """)
+        cursor.execute(""" insert into spanglish_category (id, name, added) values (1, 'Entertainment', NOW()), (2, 'Greeting', NOW()); """)
         result = cursor.rowcount
         conn.commit()
 
@@ -90,7 +90,7 @@ def setup_category():
 
 
 def setup_word():
-    """ create a word with id 1 """
+    """ create two words with id 1 & 2 """
     
     logger.debug("setup word fixture")
 
@@ -99,7 +99,7 @@ def setup_word():
     try:
         cursor = conn.cursor()
         query = "insert into spanglish_word (id, word, word_en, category_id, language_id, added) " + \
-                "values (1, 'hablar', 'talk', 1, 1, NOW()); "
+                "values (1, 'hablar', 'talk', 1, 1, NOW()), (2, 'hola', 'hello', 2, 1, NOW()); "
         cursor.execute(query)
         result = cursor.rowcount
         conn.commit()
@@ -118,7 +118,7 @@ def setup_word():
 
     
 def setup_sentence():
-    """ create a sentence with id 1 """
+    """ create two sentences with id 1 & 2 """
     
     logger.debug("setup sentence fixture")
 
@@ -127,7 +127,7 @@ def setup_sentence():
     try:
         cursor = conn.cursor()
         query = "insert into spanglish_sentence (id, sentence, sentence_en, category_id, word_id, language_id, added) " + \
-                "values (1, 'hablo testo', 'talk testing', 1, 1, 1, NOW() ); "
+                "values (1, 'hablo testo', 'talk testing', 1, 1, 1, NOW() ), (2, 'habla bla', 'talk bla', 1, 1, 1, NOW() ); "
         cursor.execute(query)
         result = cursor.rowcount
         conn.commit()

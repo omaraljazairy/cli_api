@@ -30,11 +30,14 @@ def make_request( *args, action='str', api=dict,  **kwargs):
         "Authorization": token,
     }
 
+    logger.debug("========== request setup =========")
     logger.debug("api_request: %s ", api_request)
     logger.debug("action: %s", action)
     logger.debug("header: %s", header)
     logger.debug("args: %s", args)
+    logger.debug("params: %s", kwargs)
 
+    logger.debug("========== end request setup =========")
 
     if action.upper() == 'GET':
 

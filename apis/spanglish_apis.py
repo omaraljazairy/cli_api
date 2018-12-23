@@ -3,7 +3,7 @@ from services.requester import make_request
 from services.logger import get_logger
 import sys
 import importlib
-#from spanglish import category
+
 
 logger = get_logger(loggername='spanglish')
 

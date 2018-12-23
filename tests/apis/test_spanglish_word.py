@@ -121,13 +121,25 @@ class TestSpanglishWord(TestCase):
         logger.debug("word_id generated for this test: {}".format(self.word_id))
         
         runner = CliRunner()
-        result = runner.invoke(update_word, ['--word_id', int(self.word_id), '--word', 'blbl'])
+        result = runner.invoke(update_word, ['--word_id', int(self.word_id), '--word', 'blbl', '--word_en', 'bmbm', '--category', 'Greeting', '--language', 'EN'])
 
         logger.debug("update result output: {}".format(result.output))
 
         self.assertTrue(result.exit_code == 0)
         
-        
+
+    def test_delete_word(self):
+        """ try to delete the word with id 1 and expect to exit with code 0 """
+
+        delete_word = getattr(word, 'delete_word')
+
+        runner = CliRunner()
+        result = runner.invoke(delete_word, ['--word_id', str(self.word_id)])
+
+        logger.debug("delete result output: {}".format(result.output))
+
+        self.assertTrue(result.exit_code == 0)
+
         
     def tearDown(self):
         """ runs after every test """

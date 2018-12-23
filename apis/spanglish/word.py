@@ -104,10 +104,10 @@ def add_word(word, word_en, category, language):
 
 @click.command()
 @click.option('--word_id', type=int, prompt='WordId')
-@click.option('--word', type=str, default=None, required=False)
-@click.option('--word_en', type=str, default=None, required=False)
-@click.option('--category', type=str, default=None, required=False)
-@click.option('--language', type=str, default=None, required=False)
+@click.option('--word', type=str, default=None, required=False, prompt="Word")
+@click.option('--word_en', type=str, default=None, required=False, prompt="Word_en")
+@click.option('--category', type=str, default=None, required=False, prompt="Category")
+@click.option('--language', type=str, default=None, required=False, prompt="Language")
 def update_word(word_id, word=None, word_en=None, category=None, language=None):
     """ takes the word_id as arguments and returns the update result """
 
@@ -133,6 +133,34 @@ def update_word(word_id, word=None, word_en=None, category=None, language=None):
         raise click.Abort()
     
 
-    logger.debug("response from spanglish add word: {}".format(msg))
+    logger.debug("response from spanglish update word: {}".format(msg))
+
+    click.echo("response message: %s " % msg)
+
+
+@click.command()
+@click.option('--word_id', type=int, prompt='WordId')
+def delete_word(word_id):
+    """ takes the word_id as arguments and returns the deleted result """
+
+    args_params = (str(word_id),)
+    params = {}
+    api = (api_name, 'word')
+
+    logger.debug("args_params received: {}".format(args_params))
+
+    response = make_request(*args_params, api=api, action='delete',  **params)
+    status_code = response.status_code
+    content = response.text
+
+    msg = str(status_code) + ' : ' + str(content)
+    
+    if status_code >= 300:
+
+        click.echo("response error message: %s " % msg)
+        raise click.Abort()
+    
+
+    logger.debug("response from spanglish delete word: {}".format(msg))
 
     click.echo("response message: %s " % msg)
