@@ -73,7 +73,7 @@ def setup_category():
 
     try:
         cursor = conn.cursor()
-        cursor.execute(""" insert into spanglish_category (id, name, added) values (1, 'Entertainment', NOW()), (2, 'Greeting', NOW()); """)
+        cursor.execute(""" insert into spanglish_category (id, name, added) values (1, 'Entertainment', NOW()), (2, 'Greeting', NOW()), (3, 'Verb', NOW()); """)
         result = cursor.rowcount
         conn.commit()
 
@@ -99,7 +99,8 @@ def setup_word():
     try:
         cursor = conn.cursor()
         query = "insert into spanglish_word (id, word, word_en, category_id, language_id, added) " + \
-                "values (1, 'hablar', 'talk', 1, 1, NOW()), (2, 'hola', 'hello', 2, 1, NOW()); "
+                "values (1, 'hablar', 'talk', 3, 1, NOW()), (2, 'hola', 'hello', 2, 1, NOW()), " + \
+                "(3, 'comer', 'eat', 3, 1, NOW()), (4, 'tomar', 'drink', 3, 1, NOW()); "
         cursor.execute(query)
         result = cursor.rowcount
         conn.commit()
@@ -153,7 +154,8 @@ def setup_verb():
     try:
         cursor = conn.cursor()
         query = "insert into spanglish_verb (id, yo, tu, el_ella_ud, nosotros, vosotros, ellos_ellas_uds, tenses, word_id, added) " + \
-                "values (1, 'hablo', 'hablas', 'habla', 'hablamos', 'hablais', 'hablan', 'SIMPLE_PRESENT', 1, NOW() ); "
+                "values (1, 'hablo', 'hablas', 'habla', 'hablamos', 'hablais', 'hablan', 'SIMPLE_PRESENT', 1, NOW() ), " + \
+                "(2, 'como', 'comes', 'come', 'comemos', 'comeis', 'comen', 'SIMPLE_PRESENT', 3, NOW() ); "
         cursor.execute(query)
         result = cursor.rowcount
         conn.commit()
