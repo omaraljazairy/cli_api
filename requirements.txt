@@ -17,7 +17,7 @@ public==2.0.1
 pyaml==17.12.1
 Pygments==2.2.0
 pylint==2.1.1
-PyYAML==3.13
+PyYAML==5.4
 query-string==1.0.2
 redis==2.10.6
 request==1.0.2
